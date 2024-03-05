@@ -5,7 +5,10 @@ WORKDIR /opt/app/
 RUN apk add --update --no-cache \
     build-base \
     postgresql-dev \
-    bash
+    bash \
+    vim
+
+ENV EDITOR=vim
 
 COPY Gemfile Gemfile.lock ./
 
