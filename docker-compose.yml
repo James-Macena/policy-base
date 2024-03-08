@@ -1,33 +1,29 @@
-version: "3.8"
 services:
   db:
     image: postgres:16.2
-    restart: always
     ports:
       - 5432:5432
     volumes:
       - postgres_data:/var/lib/postgres/data
   app:
     build: .
-    restart: always
     depends_on:
       - db
+      - rabbitmq
     ports:
-      - 3000:3000
+      - 4000:4000
     volumes:
       - .:/opt/app
       - rubygems:/usr/local/bundle
     environment:
       RAILS_ENV: development
   rabbitmq:
-    image: rabbitmq:3.13.0-alpine
-    depends_on:
-      - app
+    image: rabbitmq:3.13-management
+    hostname: rabbitmq
     restart: always
     ports:
       - 5672:5672
       - 15672:15672
-
 volumes:
   postgres_data:
   rubygems:
