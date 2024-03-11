@@ -6,7 +6,6 @@ ruby '3.1.4'
 
 gem 'bootsnap', require: false
 gem 'bunny'
-gem 'jbuilder'
 gem 'pg', '~> 1.1'
 gem 'puma', '>= 5.0'
 gem 'rails', '~> 7.1.3'
@@ -20,4 +19,8 @@ group :development, :test do
   gem 'rubocop-rails'
   gem 'rubocop-rspec'
   gem 'shoulda-matchers', '~> 6.1'
+end
+
+group :test do
+  gem 'database_cleaner-active_record'
 end
