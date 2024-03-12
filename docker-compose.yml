@@ -19,6 +19,7 @@ services:
       - rubygems:/usr/local/bundle
     environment:
       RAILS_ENV: development
+      PORT: 4000
   rabbitmq:
     image: rabbitmq:3.13-management
     hostname: rabbitmq
