@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class RabbitmqConnection
-  Workers = ['CreatePolicyWorker'].freeze
+  WORKERS = ['CreatePolicyWorker'].freeze
 
   attr_reader :connection, :channel
 
@@ -12,7 +12,7 @@ class RabbitmqConnection
   end
 
   def start_workers
-    Workers.each do |worker_class|
+    WORKERS.each do |worker_class|
       Thread.new do
         worker_class.constantize.new(channel).work
       end
