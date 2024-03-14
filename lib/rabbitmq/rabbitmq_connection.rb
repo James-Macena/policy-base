@@ -6,7 +6,7 @@ class RabbitmqConnection
   attr_reader :connection, :channel
 
   def initialize
-    @connection = Bunny.new(hostname: 'rabbitmq')
+    @connection = Bunny.new(hostname: ENV.fetch('RABBITMQ_HOST'))
     @connection.start
     @channel = @connection.create_channel
   end
