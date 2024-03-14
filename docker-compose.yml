@@ -1,33 +1,61 @@
 services:
   db:
     image: postgres:16.2
+    container_name: policy-base-postgres
+    hostname: ${POSTGRES_HOST}
     ports:
       - 5432:5432
     volumes:
       - postgres_data:/var/lib/postgres/data
-    environment:
-      POSTGRES_PASSWORD: postgres
-  app:
-    build: .
-    hostname: policy-base
-    depends_on:
-      - db
-      - rabbitmq
-    ports:
-      - 4000:4000
-    volumes:
-      - .:/opt/app
-      - rubygems:/usr/local/bundle
-    environment:
-      RAILS_ENV: development
-      PORT: 4000
+    env_file: .env
+    healthcheck:
+      test: pg_isready -U ${POSTGRES_USER}
+      interval: 1m30s
   rabbitmq:
     image: rabbitmq:3.13-management
-    hostname: rabbitmq
+    container_name: policy-base-rabbitmq
+    hostname: ${RABBITMQ_HOST}
     restart: always
     ports:
       - 5672:5672
       - 15672:15672
+    healthcheck:
+      test: rabbitmqctl status
+      interval: 30s
+  app:
+    build: .
+    user: ${UID}:${GID}
+    container_name: policy-base-app
+    hostname: policy-base
+    depends_on:
+      db:
+        condition: service_started
+        restart: true
+      rabbitmq:
+        condition: service_started
+        restart: true
+    ports:
+      - 4000:4000
+    volumes:
+      - .:/opt/policy-base
+      - rubygems:/usr/local/bundle
+    env_file: .env
+    healthcheck:
+      test: curl http://localhost:4000/up
+      interval: 1m30s
+    command: bash -c 'bin/setup && bundle exec rails s -b 0.0.0.0'
+  bunny:
+    build: .
+    container_name: policy-base-bunny
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+        restart: true
+    volumes:
+      - .:/opt/policy-base
+      - rubygems:/usr/local/bundle
+    env_file: .env
+    command: bash -c 'bundle exec rake rabbitmq:start_workers'
 volumes:
   postgres_data:
   rubygems:

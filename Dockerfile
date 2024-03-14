@@ -1,10 +1,11 @@
 FROM ruby:3.1.4-alpine as build
 
-WORKDIR /opt/app/
+WORKDIR /opt/policy-base
 
 RUN apk add --update --no-cache \
     build-base \
     postgresql-dev \
+    curl \
     bash \
     vim
 
