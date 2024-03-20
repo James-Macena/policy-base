@@ -24,7 +24,6 @@ services:
       interval: 30s
   app:
     build: .
-    user: ${UID}:${GID}
     container_name: policy-base-app
     hostname: policy-base
     depends_on:
