@@ -9,14 +9,9 @@ class PoliciesController < ApplicationController
   end
 
   def show
-    policy = Policy.find_by(id: params[:id])
+    policy = Policy.includes(:insured, :vehicle).find_by(id: params[:id])
     return render status: :not_found if policy.nil?
 
-    full_policy_data = policy.attributes.merge(
-      insured: policy.insured.attributes,
-      vehicle: policy.vehicle.attributes
-    )
-
-    render status: :ok, json: full_policy_data.to_json
+    render json: policy, include: [:insured, :vehicle]
   end
 end

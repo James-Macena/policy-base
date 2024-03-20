@@ -13,7 +13,7 @@ RSpec.describe 'Policies', type: :request do
         vehicle: vehicle.attributes
       ).to_json
 
-      get "/policies/#{policy.id}"
+      get policy_path(id: policy.id)
 
       expect(response).to have_http_status(:ok)
       expect(response.body).to eq(expected_response)
@@ -21,7 +21,7 @@ RSpec.describe 'Policies', type: :request do
 
     context 'when policy is not found' do
       it 'returns not found status' do
-        get '/policies/1'
+        get policy_path(id: '1')
 
         expect(response).to have_http_status(:not_found)
         expect(response.body).to be_blank
