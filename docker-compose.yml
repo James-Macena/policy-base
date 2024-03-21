@@ -10,7 +10,7 @@ services:
     env_file: .env
     healthcheck:
       test: pg_isready -U ${POSTGRES_USER}
-      interval: 1m30s
+      interval: 3s
   rabbitmq:
     image: rabbitmq:3.13-management
     container_name: policy-base-rabbitmq
@@ -21,17 +21,17 @@ services:
       - 15672:15672
     healthcheck:
       test: rabbitmqctl status
-      interval: 30s
+      interval: 3s
   app:
     build: .
     container_name: policy-base-app
     hostname: policy-base
     depends_on:
       db:
-        condition: service_started
+        condition: service_healthy
         restart: true
       rabbitmq:
-        condition: service_started
+        condition: service_healthy
         restart: true
     ports:
       - 4000:4000
