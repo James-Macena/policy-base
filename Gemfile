@@ -6,6 +6,7 @@ ruby '3.1.4'
 
 gem 'bootsnap', require: false
 gem 'bunny'
+gem 'jwt'
 gem 'pg', '~> 1.1'
 gem 'puma', '>= 5.0'
 gem 'rails', '~> 7.1.3'
