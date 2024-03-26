@@ -25,7 +25,7 @@ services:
   app:
     build: .
     container_name: policy-base-app
-    hostname: policy-base
+    hostname: ${APP_HOST}
     depends_on:
       db:
         condition: service_healthy
