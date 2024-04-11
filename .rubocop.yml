@@ -19,3 +19,6 @@ Style/HashSyntax:
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
+
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent
