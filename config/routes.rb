@@ -6,4 +6,8 @@ Rails.application.routes.draw do
   get 'up' => 'rails/health#show', as: :rails_health_check
 
   resources :policies, only: %i[index show]
+
+  scope '/payments' do
+    get '/stripe_config', to: 'payments#stripe_config'
+  end
 end
